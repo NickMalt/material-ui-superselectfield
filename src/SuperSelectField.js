@@ -425,7 +425,7 @@ class SelectField extends Component {
       style, menuStyle, elementHeight, innerDivStyle, selectedMenuItemStyle, menuGroupStyle, menuFooterStyle,
       floatingLabelStyle, floatingLabelFocusStyle, underlineStyle, underlineFocusStyle,
       autocompleteUnderlineStyle, autocompleteUnderlineFocusStyle,
-      checkedIcon, unCheckedIcon, hoverColor, checkPosition
+      checkedIcon, unCheckedIcon, hoverColor, checkPosition, loading, loadingPlaceholderText
     } = this.props
 
     // Default style depending on Material-UI context (muiTheme)
@@ -578,15 +578,17 @@ class SelectField extends Component {
             onKeyDown={this.handleMenuKeyDown}
             style={{ width: menuWidth, ...menuStyle }}
           >
-            {menuItems.length
-              ? <InfiniteScroller
-                  elementHeight={elementHeight}
-                  containerHeight={containerHeight}
-                  styles={{ scrollableStyle }}
-                >
-                  {menuItems}
-                </InfiniteScroller>
-              : <ListItem primaryText={noMatchFound} style={{ cursor: 'default', padding: '10px 16px' }} disabled />
+            {loading
+              ? <ListItem primaryText={loadingPlaceholderText} style={{ cursor: 'default', padding: '10px 16px' }} disabled />
+              : menuItems.length
+                ? <InfiniteScroller
+                    elementHeight={elementHeight}
+                    containerHeight={containerHeight}
+                    styles={{ scrollableStyle }}
+                  >
+                    {menuItems}
+                  </InfiniteScroller>
+                : <ListItem primaryText={noMatchFound} style={{ cursor: 'default', padding: '10px 16px' }} disabled />
             }
           </div>
           {multiple &&
@@ -678,6 +680,8 @@ SelectField.propTypes = {
   hintText: PropTypes.string,
   hintTextAutocomplete: PropTypes.string,
   noMatchFound: PropTypes.string,
+  loading: PropTypes.bool,
+  loadingPlaceholderText: PropTypes.string,
   showAutocompleteThreshold: PropTypes.number,
   elementHeight: PropTypes.oneOfType([
     PropTypes.number,
@@ -728,6 +732,8 @@ SelectField.defaultProps = {
   hintText: 'Click me',
   hintTextAutocomplete: 'Type something',
   noMatchFound: 'No match found',
+  loading: false,
+  loadingPlaceholderText: 'Loading...',
   showAutocompleteThreshold: 10,
   elementHeight: 36,
   autocompleteFilter: (searchText, text) => {
