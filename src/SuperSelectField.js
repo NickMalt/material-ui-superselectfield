@@ -241,7 +241,7 @@ class SelectField extends Component {
 
   componentWillReceiveProps (nextProps) {
     if (!areEqual(nextProps.value, this.state.selectedItems)) {
-      this.setState({ selectedItems: nextProps.value })
+      this.setState({ selectedItems: nextProps.value, isFocused: false })
     }
     if (!areEqual(nextProps.children, this.props.children)) {
       const itemsLength = this.getChildrenLength(nextProps.children)
