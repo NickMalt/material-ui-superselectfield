@@ -232,7 +232,7 @@ class SelectField extends Component {
       isOpen: false,
       isFocused: false,
       itemsLength,
-      showAutocomplete: (itemsLength > showAutocompleteThreshold) || false,
+      showAutocomplete: (itemsLength >= showAutocompleteThreshold) || false,
       selectedItems: value || (multiple ? [] : null),
       searchText: ''
     }
@@ -247,7 +247,7 @@ class SelectField extends Component {
       const itemsLength = this.getChildrenLength(nextProps.children)
       this.setState({
         itemsLength,
-        showAutocomplete: itemsLength > this.props.showAutocompleteThreshold
+        showAutocomplete: itemsLength >= this.props.showAutocompleteThreshold
       })
     }
   }
@@ -290,7 +290,7 @@ class SelectField extends Component {
   }
 
   openMenu () {
-    if (this.state.itemsLength) this.setState({ isOpen: true }, () => this.focusTextField())
+    this.setState({ isOpen: true }, () => this.focusTextField())
   }
 
   focusTextField () {
@@ -521,7 +521,6 @@ class SelectField extends Component {
     const popoverHeight = autoCompleteHeight + (containerHeight || noMatchFoundHeight) + footerHeight
     const scrollableStyle = { overflowY: nb2show >= menuItems.length ? 'hidden' : 'scroll' }
     const menuWidth = this.root ? this.root.clientWidth : null
-
     return (
       <div
         ref={ref => (this.root = ref)}
