@@ -286,7 +286,8 @@ class SelectField extends Component {
     const { onChange, name } = this.props
     onChange(this.state.selectedItems, name)
     if (reason) this.setState({ isFocused: false }) // if reason === 'clickaway' or 'offscreen'
-    this.setState({ isOpen: false, searchText: '' }, () => !reason && this.root.focus())
+    this.setState({ isOpen: false }, () => !reason && this.root.focus())
+    this.clearTextField()
   }
 
   openMenu () {
@@ -310,7 +311,7 @@ class SelectField extends Component {
   }
 
   clearTextField (callback) {
-    this.setState({ searchText: '' }, callback)
+    this.changeSearchText('', callback)
   }
 
   /**
@@ -325,9 +326,13 @@ class SelectField extends Component {
   /**
    * TextField autocomplete methods
    */
-  handleTextFieldAutocompletionFiltering = (event, searchText) => {
+  changeSearchText = (searchText, callback) => {
     this.props.onAutoCompleteTyping(searchText)
-    this.setState({ searchText }, () => this.focusTextField())
+    this.setState({ searchText }, callback)
+  }
+
+  handleTextFieldAutocompletionFiltering = (event, searchText) => {
+    this.changeSearchText(searchText, () => this.focusTextField())
   }
 
   handleTextFieldKeyDown = ({ key }) => {
@@ -337,7 +342,6 @@ class SelectField extends Component {
         break
 
       case 'Escape':
-        this.clearTextField()
         this.closeMenu()
         break
 
